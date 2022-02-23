@@ -1,6 +1,6 @@
 let url = 'http://www.google.com'
 
-function log(message){
+function log(message) {
     console.log(message)
 }
 
@@ -10,3 +10,4 @@ function Welcome() {
 module.exports.endpoint = url
 
 module.exports.printMessage = printMyMessage
+module.exports.printWelcomeMessage = Welcome

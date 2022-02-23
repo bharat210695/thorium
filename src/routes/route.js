@@ -1,59 +1,53 @@
 const express = require('express');
-const underscore = require('underscore')
 const router = express.Router();
-const logger = require('../logger/logger')
-const helper = require('../util/helper')
-const formatter = require('../validator/formatter')
-const lodash = require('lodash')
+
+// const logger = require('../logger/logger')
+// const helper = require('../util/helper')
+// const formatter = require('../validator/formatter')
+// const lodash = require('lodash')
 
 
-router.get('/test-me', function(req, res) {
-    let names = ['Hariom', 'Arpit', 'Akash', 'Sabiha']
-
-    logger.printMessage('thorium')
-    console.log(logger.url)
-    logger.printWelcomeMessage()
 
 
-    helper.printCurrentDate()
-    helper.printCurrentMonth()
-    helper.printBatchInfo()
 
+//====================================//
 
-    formatter.trim()
-    formatter.changeToUpperCase()
-    formatter.changetoLowerCase()
-
-
-    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    let subArrays = lodash.chunk(months, 3)
-    console.log('Chunks of months: ', subArrays)
-
-    let oddNumbers = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
-    let lastNumbers = lodash.tail(oddNumbers)
-    console.log('Last 9 odd numbers: ', lastNumbers)
-
-    let arr1 = [1, 2, 3]
-    let arr2 = [2, 3, 4, 4]
-    let arr3 = [4, 5]
-    let arr4 = [4, 6, 4]
-    let arr5 = [5, 8]
-
-    console.log('Merged array with unique values: ', lodash.union(arr1, arr2, arr3, arr4, arr5))
-
-    let movie1 = ['horror', 'The Shining']
-    let movie2 = ['drama', 'Titanic']
-    let movie3 = ['thriller', 'Shutter Island']
-    let movie4 = ['fantasy', 'Pans Labyrinth']
-    let movieObject = lodash.fromPairs([movie1, movie2, movie3, movie4])
-    console.log('Movies object: ', movieObject)
-    res.send('My first ever api of the week!')
+//1. list of movies
+router.get('/movies', function(req, res) {
+    res.send('["The Matrix", "Inception", "Dune", "Arrival", "Her", "Gravity"]')
 });
 
+//2.  movies/indexNumber
+router.get('/movies/:movieId', function(req, res) {
+    movie = ["The Matrix", "Inception", "Dune", "Arrival", "Her", "Gravity"]
+    let value = req.params.movieId;
+    if (value > movie.length - 1) {
+        res.send("does not exist")
+    } else {
+        res.send(movie[value])
+    }
+});
 
-router.get('/hello', function(req, res) {
+//3. if the index is greater than the valid maximum value a message is returned
+router.get('/movies', function(req, res) {
+    res.send([{ id: 1, name: 'The Matrix' }, { id: 2, name: 'Inception' }, { id: 3, name: 'Dune' }, { id: 4, name: 'Arrival' }, { id: 5, name: 'Her' }, { id: 6, name: 'Gravity' }])
+});
 
-    res.send('My first ever api of the week!')
+//4. Each movie object should have values - id, name.
+router.get('/films/:filmId', function(req, res) {
+    let movie = [{ id: 1, name: 'The Matrix' }, { id: 2, name: 'Inception' }, { id: 3, name: 'Dune' }, { id: 4, name: 'Arrival' }, { id: 5, name: 'Her' }, { id: 6, name: 'Gravity' }]
+    let value = req.params.filmId;
+    let found = false;
+    for (i = 0; i < movie.length; i++) {
+        if (movie[i].id == value) {
+            found = true
+            res.send(movie[i])
+            break
+        }
+    }
+    if (found == false) {
+        res.send("No movies exists with this id")
+    }
 });
 
 module.exports = router;

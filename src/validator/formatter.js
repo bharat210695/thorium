@@ -1,9 +1,9 @@
 function trim() {
-    let name = 'Bharat Aggni Bachya'
+    let name = '    Bharat Aggni Bachya    '
     console.log('Trimmed name is:', name.trim())
 }
 
-function changetoLowerCase() {
+function changeToLowerCase() {
     let name = 'BHARAT AGGNI BACHYA'
     console.log('Name in lowercase is:', name.toLowerCase())
 }

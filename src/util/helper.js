@@ -1,16 +1,23 @@
-let today = new Date()
-let date = today.getData()
-console.log(data)
-
-let today1 = new Data()
-let month = today1.getMonth()
-console.log(month)
-
-function getBatchInfo(info){
-    console.log(info)
+function printDate() {
+    let today = new Date()
+    let date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
+        // Added 1 to month because months start from 0
+    console.log('Current date is: ', date)
 }
 
-module.exports.date=date
-module.exports.month=month
-module.exports.information=getBatchInfo
+//Prints the current month
+function printMonth() {
+    let today = new Date()
+    let month = today.getMonth() + 1
+        // Added 1 to month because months start from 0
+    console.log('Current month is: ', month)
+}
 
+//Prints information about the batch
+function getBatchInfo() {
+    console.log('Thorium, W3D1, the topic for today is Nodejs module system')
+}
+
+module.exports.printCurrentDate = printDate
+module.exports.printCurrentMonth = printMonth
+module.exports.printBatchInfo = getBatchInfo
