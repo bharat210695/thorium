@@ -1,53 +1,48 @@
 const express = require('express');
 const router = express.Router();
 
-// const logger = require('../logger/logger')
-// const helper = require('../util/helper')
-// const formatter = require('../validator/formatter')
-// const lodash = require('lodash')
-
-
-
-
-
-//====================================//
-
-//1. list of movies
-router.get('/movies', function(req, res) {
-    res.send('["The Matrix", "Inception", "Dune", "Arrival", "Her", "Gravity"]')
-});
-
-//2.  movies/indexNumber
-router.get('/movies/:movieId', function(req, res) {
-    movie = ["The Matrix", "Inception", "Dune", "Arrival", "Her", "Gravity"]
-    let value = req.params.movieId;
-    if (value > movie.length - 1) {
-        res.send("does not exist")
-    } else {
-        res.send(movie[value])
-    }
-});
-
-//3. if the index is greater than the valid maximum value a message is returned
-router.get('/movies', function(req, res) {
-    res.send([{ id: 1, name: 'The Matrix' }, { id: 2, name: 'Inception' }, { id: 3, name: 'Dune' }, { id: 4, name: 'Arrival' }, { id: 5, name: 'Her' }, { id: 6, name: 'Gravity' }])
-});
-
-//4. Each movie object should have values - id, name.
-router.get('/films/:filmId', function(req, res) {
-    let movie = [{ id: 1, name: 'The Matrix' }, { id: 2, name: 'Inception' }, { id: 3, name: 'Dune' }, { id: 4, name: 'Arrival' }, { id: 5, name: 'Her' }, { id: 6, name: 'Gravity' }]
-    let value = req.params.filmId;
-    let found = false;
-    for (i = 0; i < movie.length; i++) {
-        if (movie[i].id == value) {
-            found = true
-            res.send(movie[i])
-            break
+let players = [];
+router.post('/players', function(req, res) {
+    let player = req.body;
+    let playerName = players.name;
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].name == playerName) {
+            res.send("player already exists");
         }
     }
-    if (found == false) {
-        res.send("No movies exists with this id")
-    }
+    players.push(player);
+    console.log('here is the player from request', players);
+    res.send(players);
+
 });
 
-module.exports = router;
+//===================================================================================//
+
+router.post('/players/:playerName/bookings/:bookingId', function(req, res) {
+        let name = req.params.playerName
+        let isPlayerPresent = false
+
+        for (let i = 0; i < players.length; i++) {
+            if (players[i].name == name) {
+                isPlayerPresent = true
+            }
+        }
+        if (!isPlayerPresent) {
+            return res.send('Player not present')
+        }
+
+        let booking = req.body
+        let bookingId = req.params.bookingId
+        for (let i = 0; i < players.length; i++) {
+            if (players[i].name == name) {
+                for (let j = 0; j < players[i].bookings.length; j++) {
+                    if (players[i].bookings[j].bookingNumber == bookingId) {
+                        return res.send('Booking with this id is already present')
+                    }
+                }
+                players[i].bookings.push(booking)
+            }
+        }
+        res.send(players)
+    }),
+    module.exports = router;
