@@ -1,24 +1,35 @@
 const { count } = require("console")
 const authorModel = require("../models/authorModel")
-const bookModel= require("../models/bookModel")
+const bookModel = require("../models/bookModel")
+const publisherModel = require("../models/publisherModel")
 
-const createBook= async function (req, res) {
-    let book = req.body
-    let bookCreated = await bookModel.create(book)
-    res.send({data: bookCreated})
+const book = async function(req, res) {
+    let books = req.body
+    let authorId = books.authors
+    let publisherId = books.publishers
+
+    if (!authorId)
+        return res.send('The request is not valid as the author details are required')
+
+    let authors = await authorModel.findById(authorId)
+    if (!authors)
+        return res.send('The request is not valid as no author is present with the given author id')
+
+    if (!publisherId)
+        return res.send('The request is not valid as the publisher details are required')
+
+    let publishers = await publisherModel.findById(publisherId)
+    if (!publishers)
+        return res.send('The request is not valid as no publisher is present with the given publisher id')
+
+    let bookCreated = await bookModel.create(books)
+    return res.send({ data: bookCreated })
 }
 
-const getBooksData= async function (req, res) {
-    let books = await bookModel.find()
-    res.send({data: books})
+const allDetails = async function(req, res) {
+    let allBooks = await bookModel.find().populate('author publisher')
+    res.send({ data: allBooks })
 }
 
-const getBooksWithAuthorDetails = async function (req, res) {
-    let specificBook = await bookModel.find().populate('author_id')
-    res.send({data: specificBook})
-
-}
-
-module.exports.createBook= createBook
-module.exports.getBooksData= getBooksData
-module.exports.getBooksWithAuthorDetails = getBooksWithAuthorDetails
+module.exports.book = book
+module.exports.allDetails = allDetails
