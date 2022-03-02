@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-const bookSchema = new mongoose.Schema( {
+const bookSchema = new mongoose.Schema({
+    /** 
     bookName: String, 
     authorName: String, 
     tags: [String],
@@ -20,6 +21,21 @@ const bookSchema = new mongoose.Schema( {
     //  }
     summary :  mongoose.Schema.Types.Mixed,
     isDeleted: Boolean //true on book deletion i.e you flag the document/data as isDeleted: true..(mark "dirty")
+*/
+
+    Books: {
+        name: String,
+        author_id: Number,
+        price: Number,
+        ratings: Number,
+    },
+
+    Authors: {
+        author_id: Number,
+        author_name: String,
+        age: Number,
+        address: String,
+    },
 
 }, { timestamps: true });
 
