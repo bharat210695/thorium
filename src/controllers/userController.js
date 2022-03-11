@@ -1,15 +1,23 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
-const createUser = async function(abcd, xyz) {
+const createUser = async function(req, res) {
+    try {
+        let data = req.body;
+        console.log(data)
+        if (Object.keys(data).length != 0) {
+            let savedData = await userModel.create(data);
+            res.status(201).send({ msg: savedData });
+        } else res.status(400).send({ msg: "BAD REQUEST" })
+    } catch (err) {
+        console.log("This is the error :", err.message)
+        res.status(500).send({ msg: "Error", error: err.message })
+    }
+}
 
-    let data = abcd.body;
-    let savedData = await userModel.create(data);
-    console.log(abcd.newAtribute);
-    xyz.send({ msg: savedData });
-};
 
 const loginUser = async function(req, res) {
+
     let userName = req.body.emailId;
     let password = req.body.password;
     let user = await userModel.findOne({ emailId: userName, password: password });
